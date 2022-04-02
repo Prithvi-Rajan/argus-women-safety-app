@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android.iml" filepath="$PROJECT_DIR$/.idea/modules/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/71949132/android.background_location.iml" filepath="$PROJECT_DIR$/.idea/modules/71949132/android.background_location.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/679036865/android.contacts_service.iml" filepath="$PROJECT_DIR$/.idea/modules/679036865/android.contacts_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1509573724/android.flutter_background_service.iml" filepath="$PROJECT_DIR$/.idea/modules/1509573724/android.flutter_background_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1030540302/android.flutter_phone_direct_caller.iml" filepath="$PROJECT_DIR$/.idea/modules/1030540302/android.flutter_phone_direct_caller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-206538769/android.flutter_webview_plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/-206538769/android.flutter_webview_plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1302025098/android.fluttertoast.iml" filepath="$PROJECT_DIR$/.idea/modules/1302025098/android.fluttertoast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-473276378/android.geocoder.iml" filepath="$PROJECT_DIR$/.idea/modules/-473276378/android.geocoder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-100292027/android.geolocator.iml" filepath="$PROJECT_DIR$/.idea/modules/-100292027/android.geolocator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-741342709/android.google_api_availability.iml" filepath="$PROJECT_DIR$/.idea/modules/-741342709/android.google_api_availability.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1234763537/android.location.iml" filepath="$PROJECT_DIR$/.idea/modules/-1234763537/android.location.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-74015598/android.location_permissions.iml" filepath="$PROJECT_DIR$/.idea/modules/-74015598/android.location_permissions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/29555568/android.path_provider.iml" filepath="$PROJECT_DIR$/.idea/modules/29555568/android.path_provider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1059763880/android.permission_handler.iml" filepath="$PROJECT_DIR$/.idea/modules/-1059763880/android.permission_handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/759086365/android.sensors.iml" filepath="$PROJECT_DIR$/.idea/modules/759086365/android.sensors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1431588054/android.shared_preferences.iml" filepath="$PROJECT_DIR$/.idea/modules/1431588054/android.shared_preferences.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1853090874/android.sms_maintained.iml" filepath="$PROJECT_DIR$/.idea/modules/-1853090874/android.sms_maintained.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/660523452/android.telephony.iml" filepath="$PROJECT_DIR$/.idea/modules/660523452/android.telephony.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1880482294/android.url_launcher.iml" filepath="$PROJECT_DIR$/.idea/modules/-1880482294/android.url_launcher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1035334332/android.vibration.iml" filepath="$PROJECT_DIR$/.idea/modules/1035334332/android.vibration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-570978464/android.workmanager.iml" filepath="$PROJECT_DIR$/.idea/modules/-570978464/android.workmanager.iml" />
+    </modules>
+  </component>
+</project>
