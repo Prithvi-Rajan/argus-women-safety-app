@@ -51,7 +51,7 @@ class _SplashState extends State<Splash> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 180.0),
                 child: Text(
-                  "AMAAN",
+                  "ARGUS",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

@@ -49,9 +49,9 @@ class AboutUs extends StatelessWidget {
           AboutCard(
             asset: "logo",
             desc:
-                """Amaan is a vigilant mobile application that enables the user to stay connected with the ones who care! It gives the user an option to share live location to concerned people through SOS alerts and enables the user to access emergency services. Be a witness of the unfortunate occurring incident and call for help. It is your personal companion.""",
+                """Argus is a vigilant mobile application that enables the user to stay connected with the ones who care! It gives the user an option to share live location to concerned people through SOS alerts and enables the user to access emergency services. Be a witness of the unfortunate occurring incident and call for help. It is your personal companion.""",
             subtitle: "You Deserve to be safe!",
-            title: "AMAAN",
+            title: "Argus",
             sizeFactor: 1.8,
           ),
           AboutCard(
@@ -66,7 +66,7 @@ class AboutUs extends StatelessWidget {
             desc:
                 """@Kanwal Tanveer, @Fatima, Mahnoor, @Wadood Jamal, @Shahzaneer, @Zuwanish, @Aftab, @M. Hamza, @Hassam Talha""",
             subtitle: "Made with ❤️ for Her!",
-            title: "Amaan Team",
+            title: "Argus Team",
             sizeFactor: 2.5,
           ),
           Padding(
@@ -125,7 +125,7 @@ class AboutUs extends StatelessWidget {
           "assets/logo.png",
           height: 40,
         ),
-        applicationName: "Amaan - Women Saftey",
+        applicationName: "Argus - Women Saftey",
         applicationLegalese:
             "GDSC CUI is providing with a solution to female’s problems, an entirely userfriendly app and a need of the hour, aiming to connect you to the ones who care for you!");
   }

@@ -1,14 +1,13 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:womensafteyhackfair/Dashboard/Dashboard.dart';
 import 'package:womensafteyhackfair/Dashboard/Splsah/Splash.dart';
-// import 'package:womensafteyhackfair/background_services.dart';
-import 'package:workmanager/workmanager.dart';
+import 'package:womensafteyhackfair/firebase_options.dart';
 
 
 
@@ -19,6 +18,8 @@ void main() async {
   //   callbackDispatcher,
   //   isInDebugMode: false,
   // );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Amaan',
+      title: 'Argus',
       theme: ThemeData(
         fontFamily: GoogleFonts.poppins().fontFamily,
         primarySwatch: Colors.blue,
