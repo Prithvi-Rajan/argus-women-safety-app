@@ -184,7 +184,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<bool> checkService() async {
-    bool running = await FlutterBackgroundService().isServiceRunning();
+    bool running = await FlutterBackgroundService().isRunning();
     setState(() {
       switchValue = running;
     });
@@ -197,9 +197,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // FlutterBackgroundService.initialize(onStart);
       print('Shook...................');
     } else {
-      FlutterBackgroundService().sendData(
-        {"action": "stopService"},
-      );
+      FlutterBackgroundService().invoke("stopService");
     }
   }
 }

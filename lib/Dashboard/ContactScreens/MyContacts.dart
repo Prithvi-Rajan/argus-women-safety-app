@@ -60,7 +60,7 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
                       itemBuilder: (context, index) {
                         return Slidable(
                           actionPane: SlidableDrawerActionPane(),
-                          actionExtentRatio: 0.25,
+                          actionExtentRatio: 0.25,                          
                           child: Container(
                             color: Colors.white,
                             child: ListTile(

@@ -39,21 +39,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder(
-          future: isAppOpeningForFirstTime(),
-          builder: (context, AsyncSnapshot<bool> snap) {
-            if (snap.hasData) {
-              if (snap.data) {
-                return Dashboard();
-              } else {
-                return Splash();
-              }
-            } else {
-              return Container(
-                color: Colors.white,
-              );
-            }
-          }),
+      home: Splash(),
     );
   }
 
