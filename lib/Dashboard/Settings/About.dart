@@ -54,41 +54,7 @@ class AboutUs extends StatelessWidget {
             title: "Argus",
             sizeFactor: 1.8,
           ),
-          AboutCard(
-            asset: "gdsc",
-            desc: "",
-            subtitle: "Google Developer Student Club - Comsats University",
-            title: "GDSC - CUI",
-            sizeFactor: 3,
-          ),
-          AboutCard(
-            asset: "cui",
-            desc:
-                """@Kanwal Tanveer, @Fatima, Mahnoor, @Wadood Jamal, @Shahzaneer, @Zuwanish, @Aftab, @M. Hamza, @Hassam Talha""",
-            subtitle: "Made with ❤️ for Her!",
-            title: "Argus Team",
-            sizeFactor: 2.5,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              elevation: 5,
-              child: ListTile(
-                  onTap: () {
-                    showLicences(context);
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.grey[100],
-                    child: Center(
-                      child: Image.asset("assets/card.png", height: 30),
-                    ),
-                  ),
-                  trailing: Icon(Icons.arrow_forward_ios_rounded),
-                  title: Text("Licences")),
-            ),
-          ),
+         
           SizedBox(
             height: 50,
           ),
@@ -100,7 +66,7 @@ class AboutUs extends StatelessWidget {
                   endIndent: 10,
                 ),
               ),
-              Text("© 2021 GDSC CUI, All rights reserved."),
+              Text("2022 v1.01"),
               Expanded(
                 child: Divider(
                   indent: 10,

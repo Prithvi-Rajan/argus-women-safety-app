@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:womensafteyhackfair/Dashboard/Dashboard.dart';
+import 'package:womensafteyhackfair/create_user_screen/createUserScreen.dart';
 
 // ignore: must_be_immutable
 class OtpScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   void initState() {
-      generateOtp(widget.contact);
+    generateOtp(widget.contact);
     super.initState();
   }
 
@@ -127,7 +128,8 @@ class _OtpScreenState extends State<OtpScreen> {
                           alignment: Alignment.center,
                           child: const Text(
                             'Verify',
-                            style: TextStyle(color: Colors.black, fontSize: 16.0),
+                            style:
+                                TextStyle(color: Colors.black, fontSize: 16.0),
                           ),
                         ),
                       ),
@@ -157,11 +159,11 @@ class _OtpScreenState extends State<OtpScreen> {
           timeout: const Duration(seconds: 60),
           verificationCompleted: (AuthCredential phoneAuthCredential) {},
           verificationFailed: (FirebaseAuthException exception) {
-           // Navigator.pop(context, exception.message);
+            // Navigator.pop(context, exception.message);
           });
     } catch (e) {
       handleError(e as PlatformException);
-     // Navigator.pop(context, (e as PlatformException).message);
+      // Navigator.pop(context, (e as PlatformException).message);
     }
   }
 
@@ -179,13 +181,13 @@ class _OtpScreenState extends State<OtpScreen> {
       final UserCredential user = await _auth.signInWithCredential(credential);
       final User currentUser = await _auth.currentUser;
       assert(user.user.uid == currentUser.uid);
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Dashboard(),
-        ),
-        (route) => false,
-      );
+      if (currentUser.displayName == null || currentUser.photoURL == null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => CreateUserScreen()));
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Dashboard()));
+      }
     } catch (e) {
       handleError(e as PlatformException);
     }
@@ -231,5 +233,4 @@ class _OtpScreenState extends State<OtpScreen> {
       },
     );
   }
-
 }

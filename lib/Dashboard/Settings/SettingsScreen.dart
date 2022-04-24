@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:womensafteyhackfair/Dashboard/Settings/About.dart';
 import 'package:womensafteyhackfair/Dashboard/Settings/ChangePin.dart';
+import 'package:womensafteyhackfair/login_screen/login_screen.dart';
 // import 'package:womensafteyhackfair/background_services.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -153,6 +155,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
           ListTile(
+            title: Text("Logout"),
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
+                  (route) => false);
+            },
+            leading: CircleAvatar(
+              backgroundColor: Colors.grey[200],
+              child: Center(
+                  child: Image.asset(
+                "assets/logout.png",
+                height: 24,
+              )),
+            ),
+          ),
+          ListTile(
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => AboutUs()));
@@ -163,17 +185,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Center(
                   child: Image.asset(
                 "assets/info.png",
-                height: 24,
-              )),
-            ),
-          ),
-          ListTile(
-            title: Text("Share"),
-            leading: CircleAvatar(
-              backgroundColor: Colors.grey[200],
-              child: Center(
-                  child: Image.asset(
-                "assets/share.png",
                 height: 24,
               )),
             ),

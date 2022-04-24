@@ -1,3 +1,2 @@
 .dart_tool
-build/*
-!build/app/outputs/flutter-apk/
+build/

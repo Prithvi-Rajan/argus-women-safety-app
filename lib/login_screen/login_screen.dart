@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:womensafteyhackfair/otp_screen/otp_screen.dart';
+import '../create_user_screen/createUserScreen.dart';
 import '../login_screen/widget/country_picker.dart';
-import '../login_screen/widget/custom_button.dart';
+import '../theme.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,14 +15,19 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _contactEditingController = TextEditingController();
   var _dialCode = '';
+  TapGestureRecognizer signUpRecognizer = TapGestureRecognizer();
 
   //Login click with contact number validation
   Future<void> clickOnLogin(BuildContext context) async {
     if (_contactEditingController.text.isEmpty) {
       showErrorDialog(context, 'Contact number can\'t be empty.');
     } else {
-      final responseMessage = await Navigator.push(context, MaterialPageRoute(builder: (context) => OtpScreen(contact:'$_dialCode${_contactEditingController.text}'),
-           ));
+      final responseMessage = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(
+                contact: '$_dialCode${_contactEditingController.text}'),
+          ));
       if (responseMessage != null) {
         showErrorDialog(context, responseMessage as String);
       }
@@ -55,6 +62,19 @@ class _LoginScreenState extends State<LoginScreen> {
         return alert;
       },
     );
+  }
+
+  @override
+  void initState() {
+    signUpRecognizer.onTap = () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateUserScreen(),
+        ),
+      );
+    };
+    super.initState();
   }
 
   //build method for UI Representation
@@ -124,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 45,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color.fromARGB(255, 253, 188, 51),
+                            color: themeColor,
                           ),
                           borderRadius: BorderRadius.circular(36),
                         ),
@@ -164,10 +184,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(
                         height: 8,
                       ),
-                      CustomButton(clickOnLogin),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          foregroundColor:
+                              MaterialStateProperty.all<Color>(themeColor),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          clickOnLogin(context);
+                        },
+                        child: Container(
+                          width: screenWidth * 0.35,
+                          child: const Text(
+                            'Send OTP',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

@@ -1,9 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:womensafteyhackfair/Dashboard/Dashboard.dart';
 import 'package:womensafteyhackfair/login_screen/login_screen.dart';
+
+import '../../create_user_screen/createUserScreen.dart';
 
 class Splash extends StatefulWidget {
   const Splash({Key key}) : super(key: key);
@@ -18,12 +21,20 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ),
-      );
+      FirebaseAuth.instance.authStateChanges().first.then((user) {
+        if (user != null) {
+          if (user.displayName == null || user.photoURL == null) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => CreateUserScreen()));
+          } else {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Dashboard()));
+          }
+        } else {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        }
+      });
     });
   }
 
