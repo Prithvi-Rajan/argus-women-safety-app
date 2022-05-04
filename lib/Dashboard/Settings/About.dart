@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:timelines/timelines.dart';
 import 'package:womensafteyhackfair/Dashboard/Settings/AboutCard.dart';
+import 'package:womensafteyhackfair/constants.dart';
 
 class AboutUs extends StatelessWidget {
   const AboutUs({Key key}) : super(key: key);
@@ -49,9 +50,9 @@ class AboutUs extends StatelessWidget {
           AboutCard(
             asset: "logo",
             desc:
-                """Argus is a vigilant mobile application that enables the user to stay connected with the ones who care! It gives the user an option to share live location to concerned people through SOS alerts and enables the user to access emergency services. Be a witness of the unfortunate occurring incident and call for help. It is your personal companion.""",
+                """${appName} is a vigilant mobile application that enables the user to stay connected with the ones who care! It gives the user an option to share live location to concerned people through SOS alerts and enables the user to access emergency services. Be a witness of the unfortunate occurring incident and call for help. It is your personal companion.""",
             subtitle: "You Deserve to be safe!",
-            title: "Argus",
+            title: appName,
             sizeFactor: 1.8,
           ),
          
@@ -91,7 +92,7 @@ class AboutUs extends StatelessWidget {
           "assets/logo.png",
           height: 40,
         ),
-        applicationName: "Argus - Women Saftey",
+        applicationName: appName,
         applicationLegalese:
             "GDSC CUI is providing with a solution to female’s problems, an entirely userfriendly app and a need of the hour, aiming to connect you to the ones who care for you!");
   }

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:womensafteyhackfair/Dashboard/Splsah/Splash.dart';
+import 'package:womensafteyhackfair/constants.dart';
 import 'package:womensafteyhackfair/firebase_options.dart';
 import 'package:womensafteyhackfair/theme.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Argus',
+      title: appName,
       theme: ThemeData(
           fontFamily: GoogleFonts.poppins().fontFamily,
           primarySwatch: Colors.red,

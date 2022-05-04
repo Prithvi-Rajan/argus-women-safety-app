@@ -1,3 +1,6 @@
+String appName = 'SAA SURAKSHA';
+
+
 List<List<String>> sweetSayings = [
   ["Your presence,", "lights up the whole room"],
   ["We admire", "Your strong personality."],
