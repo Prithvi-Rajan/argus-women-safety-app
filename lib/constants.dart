@@ -1,5 +1,5 @@
 String appName = 'SAA SURAKSHA';
-
+String FCM_KEY = 'AAAAvnAGm8c:APA91bEX7zSb_pgzmu707WewEBxegzEIhrEfSe-RE97kaYWW0cTOZiv_Xt_AempVerOXu8dGUGPsz47nZftzsug1GXnVmRkZYeHqj6JLDb8kfdwqXB-WPDq_yRsgQoF6Ul_t0J1F4XYA';
 
 List<List<String>> sweetSayings = [
   ["Your presence,", "lights up the whole room"],

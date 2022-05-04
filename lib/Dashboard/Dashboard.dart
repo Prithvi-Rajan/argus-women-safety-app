@@ -9,6 +9,8 @@ import 'package:sms_maintained/sms.dart' as smsSender;
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/phonebook_view.dart';
 import 'package:womensafteyhackfair/Dashboard/Home.dart';
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/MyContacts.dart';
+import 'package:womensafteyhackfair/Services/alert_service.dart';
+import 'package:womensafteyhackfair/Services/fcm_service.dart';
 
 class Dashboard extends StatefulWidget {
   final int pageIndex;
@@ -69,6 +71,9 @@ class _DashboardState extends State<Dashboard> {
           : FloatingActionButton(
               backgroundColor: Color(0xFFFB9580),
               onPressed: () async {
+                AlertService alertService = AlertService();
+                alertService.sendAlert(
+                    "This is a test alert", "This is a test alert body");
                 if (alerted) {
                   int pin = (prefs.getInt('pin') ?? -1111);
                   print('User $pin .');
