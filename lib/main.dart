@@ -34,19 +34,16 @@ setupNotification() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  FirebaseMessaging.onMessage.listen(
-    (RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
 
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    },
-    onError: (e){
-      print("Foreground Notification Error: $e");
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
     }
-  );
+  }, onError: (e) {
+    print("Foreground Notification Error: $e");
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -54,7 +51,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: appName,
+      title: "SAA SURAKSHA",
       theme: ThemeData(
           fontFamily: GoogleFonts.poppins().fontFamily,
           primarySwatch: Colors.red,
