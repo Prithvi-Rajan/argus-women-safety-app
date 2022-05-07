@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:womensafteyhackfair/Services/datastore_service.dart';
 
 class MyContactsScreen extends StatefulWidget {
   const MyContactsScreen({Key key}) : super(key: key);
@@ -120,6 +121,7 @@ class _MyContactsScreenState extends State<MyContactsScreen> {
   updateNewContactList(List<String> contacts) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setStringList("numbers", contacts);
+    updateContacts(contacts);
     print(contacts);
   }
 }

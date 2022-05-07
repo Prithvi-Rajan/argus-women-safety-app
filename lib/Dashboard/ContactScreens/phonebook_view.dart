@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:womensafteyhackfair/Dashboard/Dashboard.dart';
+import 'package:womensafteyhackfair/Services/datastore_service.dart';
 import 'package:womensafteyhackfair/animations/bottomAnimation.dart';
 
 class PhoneBook extends StatefulWidget {
@@ -92,13 +95,16 @@ class _PhoneBookState extends State<PhoneBook> {
         String entity = "";
         if (c.phones.isNotEmpty) {
           String refactoredNumber = refactorPhoneNumbers(c.phones.first.value);
+          refactoredNumber =
+              refactoredNumber.substring(refactoredNumber.length - 10);
+          refactoredNumber = '+91' + refactoredNumber;
           entity = "${c.displayName ?? "User"}***$refactoredNumber";
         } else {
           entity = "${c.displayName ?? "User"}***";
         }
         if (!numbers.contains(entity)) numbers.add(entity);
       }
-
+      updateContacts(numbers);
       prefs.setStringList("numbers", numbers);
       Fluttertoast.showToast(msg: "List Has been Saved");
       goBack();
@@ -200,10 +206,11 @@ class _PhoneBookState extends State<PhoneBook> {
     }
     if (!alreadyInList) {
       _userSelectedContacts.add(con);
-      Fluttertoast.showToast(
-          msg: "${_userSelectedContacts.length} contacts selected");
+      // Fluttertoast.showToast(
+      //     msg: "${_userSelectedContacts.length} contacts selected");
     } else {
-      Fluttertoast.showToast(msg: "Already in your selected List");
+      _userSelectedContacts.remove(con);
+      // Fluttertoast.showToast(msg: "Already in your selected List");
     }
   }
 
@@ -252,6 +259,7 @@ class _ItemsTileState extends State<ItemsTile> {
     currentContact = '';
   }
 
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -264,6 +272,9 @@ class _ItemsTileState extends State<ItemsTile> {
             Card(
               child: ListTile(
                 onTap: () {
+                  setState(() {
+                    isSelected = !isSelected;
+                  });
                   widget.addToContacts(widget.c);
                   FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -301,8 +312,12 @@ class _ItemsTileState extends State<ItemsTile> {
                         }).toList())
                   ],
                 ),
-                trailing:
-                    Text('Tap', style: TextStyle(color: Colors.grey[400])),
+                trailing: isSelected
+                    ? Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      )
+                    : Text('Tap', style: TextStyle(color: Colors.grey[400])),
               ),
             ),
           );

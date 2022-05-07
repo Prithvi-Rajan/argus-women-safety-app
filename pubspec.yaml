@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  battery_info: ^1.1.1
   carousel_slider: ^4.0.0
   cloud_firestore: ^3.1.13
   contacts_service: ^0.6.3
@@ -39,8 +40,8 @@ dependencies:
   flutter_webview_plugin: ^0.4.0
   flutterfire_cli: ^0.2.0
   fluttertoast: ^8.0.8
-  geocoder: ^0.2.1
-  geolocator: ^8.2.0
+  geoflutterfire: ^3.0.3
+  geolocator: ^8.2.1
   google_fonts: ^2.1.0
   image_picker: ^0.8.5
   location: ^4.3.0
@@ -54,7 +55,6 @@ dependencies:
   telephony: ^0.1.4
   url_launcher: ^6.0.10
   vibration: ^1.7.3
-  workmanager: ^0.4.1
 
 dev_dependencies:
   flutter_test:

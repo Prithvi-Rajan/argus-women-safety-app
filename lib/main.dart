@@ -5,14 +5,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:womensafteyhackfair/Dashboard/Splsah/Splash.dart';
-import 'package:womensafteyhackfair/constants.dart';
 import 'package:womensafteyhackfair/firebase_options.dart';
 import 'package:womensafteyhackfair/theme.dart';
 
+import './Dashboard/Splsah/Splash.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  print("Handling a background message: ${message.toString()}");
 }
 
 void main() async {
@@ -21,8 +20,9 @@ void main() async {
 
   setupNotification();
 
-  SystemChrome.setPreferredOrientations(
+  await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
 
   runApp(MyApp());
 }
@@ -74,14 +74,5 @@ class MyApp extends StatelessWidget {
           )),
       home: Splash(),
     );
-  }
-
-  Future<bool> isAppOpeningForFirstTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool result = prefs.getBool("appOpenedBefore") ?? false;
-    if (!result) {
-      prefs.setBool("appOpenedBefore", true);
-    }
-    return result;
   }
 }

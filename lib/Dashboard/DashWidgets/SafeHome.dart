@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/phonebook_view.dart';
 // import 'package:womensafteyhackfair/background_services.dart';
-import 'package:workmanager/workmanager.dart';
+// import 'package:workmanager/workmanager.dart';
 
 class SafeHome extends StatefulWidget {
   const SafeHome({Key key}) : super(key: key);
@@ -183,7 +183,7 @@ class _SafeHomeState extends State<SafeHome> {
                             // );
                           } else {
                             changeStateOfHomeSafe(false);
-                            await Workmanager().cancelByTag("3");
+                            // await Workmanager().cancelByTag("3");
                           }
                         },
                         subtitle: Text(

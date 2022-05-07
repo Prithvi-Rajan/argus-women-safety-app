@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:womensafteyhackfair/Dashboard/Dashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:womensafteyhackfair/Services/fcm_service.dart';
 import '../theme.dart';
 import 'package:path/path.dart' as path;
@@ -49,7 +48,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       // FCM
       FCMService fcmService = FCMService();
       String token = await fcmService.getToken();
-      users.doc(_currentUser.uid).set({
+      await users.doc(_currentUser.uid).set({
         'name': _nameEditingController.text,
         'photoUrl': photoUrl,
         'uid': _currentUser.uid,
@@ -57,6 +56,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         'createdAtMs': DateTime.now().millisecondsSinceEpoch,
         'createdAtIso8601': DateTime.now().toIso8601String(),
         'fcmToken': token,
+        'alert': false
       });
     }
   }

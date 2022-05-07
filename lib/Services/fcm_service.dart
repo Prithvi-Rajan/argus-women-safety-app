@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:womensafteyhackfair/constants.dart';
 
-
 class FCMService {
   final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
@@ -13,16 +12,18 @@ class FCMService {
     return token;
   }
 
-  Future<bool> sendMessage(
-      List<String> userTokens, String title, String body) async {
+  Future<bool> sendMessage(List<String> userTokens, String title, String body,
+      Map messageData) async {
     final postUrl = 'https://fcm.googleapis.com/fcm/send';
     final data = {
       "registration_ids": userTokens,
       "collapse_key": "type_a",
+      "android": {"priority": "high"},
       "notification": {
         "title": title,
         "body": body,
-      }
+      },
+      "data": messageData,
     };
 
     final headers = {

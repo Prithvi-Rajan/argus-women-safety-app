@@ -1,16 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
-import 'package:permission_handler/permission_handler.dart' as appPermissions;
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_maintained/sms.dart' as smsSender;
+import 'package:sms_maintained/sms.dart' as sms_sender;
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/phonebook_view.dart';
 import 'package:womensafteyhackfair/Dashboard/Home.dart';
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/MyContacts.dart';
 import 'package:womensafteyhackfair/Services/alert_service.dart';
-import 'package:womensafteyhackfair/Services/fcm_service.dart';
+
+import '../Services/bg_service.dart';
+import '../Services/unitility_service.dart';
 
 class Dashboard extends StatefulWidget {
   final int pageIndex;
@@ -23,7 +25,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   _DashboardState({this.currentPage = 0});
 
-  List<Widget> screens = [Home(), MyContactsScreen()];
+  List<Widget> screens = [const Home(), const MyContactsScreen()];
   bool alerted = false;
   int currentPage = 0;
   final TextEditingController _pinPutController = TextEditingController();
@@ -40,22 +42,23 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     checkAlertSharedPreferences();
-    checkPermission();
+    BackgroundService.initializeService();
   }
 
   SharedPreferences prefs;
   checkAlertSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
-    if (mounted)
+    if (mounted) {
       setState(() {
         alerted = prefs.getBool("alerted") ?? false;
       });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFFAFCFE),
+      backgroundColor: const Color(0xFFFAFCFE),
       floatingActionButton: currentPage == 1
           ? FloatingActionButton(
               backgroundColor: Colors.white,
@@ -69,11 +72,13 @@ class _DashboardState extends State<Dashboard> {
               ),
             )
           : FloatingActionButton(
-              backgroundColor: Color(0xFFFB9580),
+              backgroundColor: const Color(0xFFFB9580),
               onPressed: () async {
+                String displayName =
+                    FirebaseAuth.instance.currentUser.displayName;
                 AlertService alertService = AlertService();
                 alertService.sendAlert(
-                    "This is a test alert", "This is a test alert body");
+                    "$displayName is in danger!", "Click to view location");
                 if (alerted) {
                   int pin = (prefs.getInt('pin') ?? -1111);
                   print('User $pin .');
@@ -138,46 +143,23 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  checkPermission() async {
-    appPermissions.PermissionStatus conPer =
-        await appPermissions.Permission.contacts.status;
-    appPermissions.PermissionStatus locPer =
-        await appPermissions.Permission.location.status;
-    appPermissions.PermissionStatus phonePer =
-        await appPermissions.Permission.phone.status;
-    appPermissions.PermissionStatus smsPer =
-        await appPermissions.Permission.sms.status;
-    if (conPer != appPermissions.PermissionStatus.granted) {
-      await appPermissions.Permission.contacts.request();
-    }
-    if (locPer != appPermissions.PermissionStatus.granted) {
-      await appPermissions.Permission.location.request();
-    }
-    if (phonePer != appPermissions.PermissionStatus.granted) {
-      await appPermissions.Permission.phone.request();
-    }
-    if (smsPer != appPermissions.PermissionStatus.granted) {
-      await appPermissions.Permission.sms.request();
-    }
-  }
-
   void sendSMS(String number, String msgText) {
     print(number);
     print(msgText);
-    smsSender.SmsMessage msg = new smsSender.SmsMessage(number, msgText);
-    final smsSender.SmsSender sender = new smsSender.SmsSender();
+    sms_sender.SmsMessage msg = new sms_sender.SmsMessage(number, msgText);
+    final sms_sender.SmsSender sender = new sms_sender.SmsSender();
     msg.onStateChanged.listen((state) {
-      if (state == smsSender.SmsMessageState.Sending) {
+      if (state == sms_sender.SmsMessageState.Sending) {
         return Fluttertoast.showToast(
           msg: 'Sending Alert...',
           backgroundColor: Colors.blue,
         );
-      } else if (state == smsSender.SmsMessageState.Sent) {
+      } else if (state == sms_sender.SmsMessageState.Sent) {
         return Fluttertoast.showToast(
           msg: 'Alert Sent Successfully!',
           backgroundColor: Colors.green,
         );
-      } else if (state == smsSender.SmsMessageState.Fail) {
+      } else if (state == sms_sender.SmsMessageState.Fail) {
         return Fluttertoast.showToast(
           msg: 'Failure! Check your credits & Network Signals!',
           backgroundColor: Colors.red,
