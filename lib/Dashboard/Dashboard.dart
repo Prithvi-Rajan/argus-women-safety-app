@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 import 'package:pinput/pin_put/pin_put.dart';
@@ -13,6 +15,7 @@ import 'package:womensafteyhackfair/Services/alert_service.dart';
 
 import '../Services/bg_service.dart';
 import '../Services/unitility_service.dart';
+import '../ViewLocation/view_location.dart';
 
 class Dashboard extends StatefulWidget {
   final int pageIndex;
@@ -43,6 +46,20 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     checkAlertSharedPreferences();
     BackgroundService.initializeService();
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    var initializationSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = const IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: onSelectNotification);
+  }
+
+  Future onSelectNotification(String payload) async {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ViewLocation(uid: payload)));
   }
 
   SharedPreferences prefs;
@@ -109,7 +126,7 @@ class _DashboardState extends State<Dashboard> {
             ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 12,
         child: Container(
           height: 60,
@@ -118,10 +135,11 @@ class _DashboardState extends State<Dashboard> {
             children: [
               InkWell(
                   onTap: () {
-                    if (currentPage != 0)
+                    if (currentPage != 0) {
                       setState(() {
                         currentPage = 0;
                       });
+                    }
                   },
                   child: Image.asset(
                     "assets/home.png",
@@ -129,10 +147,11 @@ class _DashboardState extends State<Dashboard> {
                   )),
               InkWell(
                   onTap: () {
-                    if (currentPage != 1)
+                    if (currentPage != 1) {
                       setState(() {
                         currentPage = 1;
                       });
+                    }
                   },
                   child: Image.asset("assets/phone_red.png", height: 28)),
             ],
@@ -186,7 +205,7 @@ class _DashboardState extends State<Dashboard> {
     List<String> numbers = prefs.getStringList("numbers") ?? [];
     LocationData myLocation;
     String error;
-    Location location = new Location();
+    Location location = Location();
     String link = '';
     try {
       myLocation = await location.getLocation();

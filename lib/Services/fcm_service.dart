@@ -14,7 +14,7 @@ class FCMService {
 
   Future<bool> sendMessage(List<String> userTokens, String title, String body,
       Map messageData) async {
-    final postUrl = 'https://fcm.googleapis.com/fcm/send';
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
     final data = {
       "registration_ids": userTokens,
       "collapse_key": "type_a",
@@ -28,7 +28,7 @@ class FCMService {
 
     final headers = {
       'content-type': 'application/json',
-      'Authorization': 'Bearer ${FCM_KEY}'
+      'Authorization': 'Bearer $FCM_KEY'
     };
 
     final response = await http.post(Uri.parse(postUrl),
@@ -43,4 +43,8 @@ class FCMService {
       return false;
     }
   }
+
+
+
+  
 }

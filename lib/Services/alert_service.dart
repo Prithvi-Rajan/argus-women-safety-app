@@ -1,5 +1,5 @@
-import 'package:battery_info/battery_info_plugin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bg_service.dart';
@@ -14,10 +14,13 @@ class AlertService {
   Future<void> sendAlert(String title, String body) async {
     BackgroundService.initializeService();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+    User _currentUser = FirebaseAuth.instance.currentUser;
     List<String> emergencyContacts =
-        extractNumbers(prefs.getStringList("numbers")) ??
-            ['+919791322960', '+911234567890'];
+        extractNumbers(prefs.getStringList("numbers"));
+    emergencyContacts = emergencyContacts != []
+        ? ['+919791322960', '+911234567890']
+        : emergencyContacts;
+    print(emergencyContacts);
     QuerySnapshot querySnapshot =
         await users.where('phoneNumber', whereIn: emergencyContacts).get();
     for (var doc in querySnapshot.docs) {
@@ -27,6 +30,6 @@ class AlertService {
     print(tokens);
 
     FCMService fcmService = FCMService();
-    fcmService.sendMessage(tokens, title, body, {});
+    fcmService.sendMessage(tokens, title, body, {'uid': _currentUser.uid});
   }
 }
