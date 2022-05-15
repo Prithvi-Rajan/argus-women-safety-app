@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import './unitility_service.dart';
+import 'utility_service.dart';
 
 void updateContacts(List<String> contacts) async {
   CollectionReference users = FirebaseFirestore.instance.collection('users');

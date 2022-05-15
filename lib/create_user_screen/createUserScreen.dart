@@ -131,13 +131,13 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                                 : FileImage(File(image.path)),
                             backgroundColor: themeColor.withAlpha(100),
                             radius: screenWidth * 0.2,
-                            child: Icon(Icons.photo_camera_front_outlined,
+                            child: const Icon(Icons.photo_camera_front_outlined,
                                 size: 48)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
-                      Container(
+                      SizedBox(
                         height: 55,
                         child: TextField(
                           decoration: const InputDecoration(
@@ -166,11 +166,11 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Dashboard(),
+                                builder: (context) => const Dashboard(),
                               ),
                               (route) => false);
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: screenWidth * 0.35,
                           child: const Text(
                             'Create Account',

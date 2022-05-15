@@ -11,24 +11,25 @@ import 'package:flutter_background_service_android/flutter_background_service_an
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_android/geolocator_android.dart' as gla;
-import 'package:womensafteyhackfair/Services/unitility_service.dart';
+import 'package:womensafteyhackfair/Services/utility_service.dart';
 import 'package:womensafteyhackfair/firebase_options.dart';
 
 class BackgroundService {
-  static void stopService() {
-    final service = FlutterBackgroundService();
+  final service = FlutterBackgroundService();
+
+  void stopService() {
+    // final service = FlutterBackgroundService();
     service.invoke('stopService');
   }
 
-  static Future<void> initializeService() async {
+  Future<void> initializeService() async {
     await checkPermission();
-    final service = FlutterBackgroundService();
+    // final service = FlutterBackgroundService();
     await service.configure(
       androidConfiguration: AndroidConfiguration(
         onStart: onStart,
         autoStart: true,
         isForegroundMode: true,
-
       ),
       iosConfiguration: IosConfiguration(
         autoStart: true,
@@ -55,10 +56,10 @@ class BackgroundService {
 
     service.on('stopService').listen((event) {
       timer?.cancel();
-      service.stopSelf();
+      // service.stopSelf();
     });
 
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
           title: "Background Service running",
@@ -87,7 +88,7 @@ class BackgroundService {
         'latitude': currentLocation.latitude,
         'longitude': currentLocation.longitude,
         'geohash': myLocationPoint.data,
-        'timstamp': FieldValue.serverTimestamp(),
+        'timestamp': FieldValue.serverTimestamp(),
       });
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {

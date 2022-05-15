@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,14 +6,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_maintained/sms.dart' as sms_sender;
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/phonebook_view.dart';
 import 'package:womensafteyhackfair/Dashboard/Home.dart';
 import 'package:womensafteyhackfair/Dashboard/ContactScreens/MyContacts.dart';
 import 'package:womensafteyhackfair/Services/alert_service.dart';
 
 import '../Services/bg_service.dart';
-import '../Services/unitility_service.dart';
+import '../Services/utility_service.dart';
 import '../ViewLocation/view_location.dart';
 
 class Dashboard extends StatefulWidget {
@@ -45,7 +43,6 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     checkAlertSharedPreferences();
-    BackgroundService.initializeService();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
     var initializationSettingsAndroid =
@@ -91,11 +88,6 @@ class _DashboardState extends State<Dashboard> {
           : FloatingActionButton(
               backgroundColor: const Color(0xFFFB9580),
               onPressed: () async {
-                String displayName =
-                    FirebaseAuth.instance.currentUser.displayName;
-                AlertService alertService = AlertService();
-                alertService.sendAlert(
-                    "$displayName is in danger!", "Click to view location");
                 if (alerted) {
                   int pin = (prefs.getInt('pin') ?? -1111);
                   print('User $pin .');
@@ -162,37 +154,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void sendSMS(String number, String msgText) {
-    print(number);
-    print(msgText);
-    sms_sender.SmsMessage msg = new sms_sender.SmsMessage(number, msgText);
-    final sms_sender.SmsSender sender = new sms_sender.SmsSender();
-    msg.onStateChanged.listen((state) {
-      if (state == sms_sender.SmsMessageState.Sending) {
-        return Fluttertoast.showToast(
-          msg: 'Sending Alert...',
-          backgroundColor: Colors.blue,
-        );
-      } else if (state == sms_sender.SmsMessageState.Sent) {
-        return Fluttertoast.showToast(
-          msg: 'Alert Sent Successfully!',
-          backgroundColor: Colors.green,
-        );
-      } else if (state == sms_sender.SmsMessageState.Fail) {
-        return Fluttertoast.showToast(
-          msg: 'Failure! Check your credits & Network Signals!',
-          backgroundColor: Colors.red,
-        );
-      } else {
-        return Fluttertoast.showToast(
-          msg: 'Failed to send SMS. Try Again!',
-          backgroundColor: Colors.red,
-        );
-      }
-    });
-    sender.sendSms(msg);
-  }
-
   sendAlertSMS(bool isAlert) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -200,17 +161,16 @@ class _DashboardState extends State<Dashboard> {
       alerted = isAlert;
     });
     checkPermission();
-
     prefs.setBool("alerted", isAlert);
     List<String> numbers = prefs.getStringList("numbers") ?? [];
     LocationData myLocation;
     String error;
-    Location location = Location();
-    String link = '';
-    try {
-      myLocation = await location.getLocation();
-      var currentLocation = myLocation;
+    String message = '';
 
+    String displayName = FirebaseAuth.instance.currentUser.displayName;
+    AlertService alertService = AlertService();
+
+    try {
       if (numbers.isEmpty) {
         setState(() {
           prefs.setBool("alerted", false);
@@ -221,24 +181,19 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: Colors.red,
         );
       } else {
-        //var coordinates =
-        //    Coordinates(currentLocation.latitude, currentLocation.longitude);
-        //var addresses =
-        //    await Geocoder.local.findAddressesFromCoordinates(coordinates);
-        // var first = addresses.first;
-        String li =
-            "http://maps.google.com/?q=${currentLocation.latitude},${currentLocation.longitude}";
+        BackgroundService bgService = BackgroundService();
         if (isAlert) {
-          link = "Help Me! SOS \n$li";
+          message = "$displayName is in danger!";
         } else {
+          // BackgroundService.stopService();
+          // bgService.stopService();
           Fluttertoast.showToast(
               msg: "Contacts are being notified about false SOS.");
-          link = "I am safe, track me here\n$li";
+          message = "$displayName is Safe!";
         }
-
-        for (int i = 0; i < numbers.length; i++) {
-          sendSMS(numbers[i].split("***")[1], link);
-        }
+        // BackgroundService.initializeService();
+        bgService.initializeService();
+        alertService.sendAlert(message, "Click to view location");
       }
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {

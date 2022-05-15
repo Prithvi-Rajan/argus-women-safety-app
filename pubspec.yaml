@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  battery_indicator: ^0.1.1
   battery_info: ^1.1.1
   carousel_slider: ^4.0.0
   cloud_firestore: ^3.1.13
@@ -44,7 +45,9 @@ dependencies:
   geoflutterfire: ^3.0.3
   geolocator: ^8.2.1
   google_fonts: ^2.1.0
+  google_maps_flutter: ^2.1.5
   image_picker: ^0.8.5
+  intl: ^0.17.0
   location: ^4.3.0
   lottie: ^1.2.1
   permission_handler: ^9.2.0

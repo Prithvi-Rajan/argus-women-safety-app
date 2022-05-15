@@ -19,7 +19,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (message.notification != null) {
     print('Message also contained a notification: ${message.notification}');
   }
-  
 }
 
 void main() async {
@@ -60,8 +59,19 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _demoNotification(
     String title, String body, Map<String, dynamic> payload) async {
-  var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
-      'sos_notification_saa_suraksha', 'Saa Suraksha',
+  // const AndroidInitializationSettings initializationSettingsAndroid =
+  //     AndroidInitializationSettings('@mipmap/app_icon');
+
+  // final InitializationSettings initializationSettings =
+  //     InitializationSettings(android: initializationSettingsAndroid);
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  //     onSelectNotification: (String payload) async {
+  //   if (payload != null) {
+  //     debugPrint('notification payload: $payload');
+  //   }
+  // });
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'sos_notification_${appName.toLowerCase()}', appName.toLowerCase(),
       channelDescription: 'SOS Notification',
       importance: Importance.max,
       playSound: false,
