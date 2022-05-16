@@ -56,14 +56,15 @@ class BackgroundService {
 
     service.on('stopService').listen((event) {
       timer?.cancel();
-      // service.stopSelf();
+      print('stopped');
+      service.stopSelf();
     });
 
     timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
           title: "Background Service running",
-          content: "Updated at ${DateTime.now()}",
+          content: "Updated at ${parseTimeStamp(DateTime.now())}",
         );
         run();
       }

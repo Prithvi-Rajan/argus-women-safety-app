@@ -92,12 +92,12 @@ class _DashboardState extends State<Dashboard> {
                   int pin = (prefs.getInt('pin') ?? -1111);
                   print('User $pin .');
                   if (pin == -1111) {
-                    sendAlertSMS(false);
+                    sendAlert(false);
                   } else {
                     showPinModelBottomSheet(pin);
                   }
                 } else {
-                  sendAlertSMS(true);
+                  sendAlert(true);
                 }
               },
               child: alerted
@@ -154,7 +154,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  sendAlertSMS(bool isAlert) async {
+  sendAlert(bool isAlert) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       prefs.setBool("alerted", isAlert);
@@ -176,6 +176,9 @@ class _DashboardState extends State<Dashboard> {
           prefs.setBool("alerted", false);
           alerted = false;
         });
+        // BackgroundService bgService = BackgroundService();
+        // bgService.initializeService();
+        // alertService.sendAlert(message, "Click to view location");
         return Fluttertoast.showToast(
           msg: 'No Contacts Found!',
           backgroundColor: Colors.red,
@@ -291,7 +294,7 @@ class _DashboardState extends State<Dashboard> {
       Fluttertoast.showToast(
         msg: 'We are glad that you are safe',
       );
-      sendAlertSMS(false);
+      sendAlert(false);
       _pinPutController.clear();
       _pinPutFocusNode.unfocus();
     } else {

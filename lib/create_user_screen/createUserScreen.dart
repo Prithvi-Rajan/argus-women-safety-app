@@ -35,7 +35,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     return location;
   }
 
-  void updateUser() async {
+  Future<void> updateUser() async {
     String photoUrl = await uploadPic();
     if (photoUrl != null && _nameEditingController.text.isNotEmpty) {
       User _currentUser = FirebaseAuth.instance.currentUser;
@@ -161,8 +161,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                             ),
                           ),
                         ),
-                        onPressed: () {
-                          updateUser();
+                        onPressed: () async {
+                          await updateUser();
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(

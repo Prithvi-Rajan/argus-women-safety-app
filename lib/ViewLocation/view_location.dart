@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:battery_indicator/battery_indicator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:womensafteyhackfair/Services/utility_service.dart';
+import 'package:womensafteyhackfair/constants.dart';
 import 'dart:async';
 import '../theme.dart';
 
@@ -16,14 +17,15 @@ class ViewLocation extends StatefulWidget {
 }
 
 class _ViewLocationState extends State<ViewLocation> {
-  Completer<GoogleMapController> _controller = Completer();
+  LatLng currentPosition;
+  bool firstSnapshot = true;
+  final Completer<GoogleMapController> _controller = Completer();
   final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+    target: LatLng(20.5937, 78.9629),
     zoom: 14.4746,
   );
 
-  void updateCameraPosition(double lat, double long) async {
-    LatLng pos = LatLng(lat, long);
+  void updateCameraPosition(LatLng pos) async {
     _markers.add(Marker(
       markerId: const MarkerId('sos'),
       position: pos,
@@ -46,6 +48,22 @@ class _ViewLocationState extends State<ViewLocation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title:
+            Text(appName, style: const TextStyle(fontWeight: FontWeight.bold)),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: themeColor,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: themeColor,
+          child: const Icon(
+            Icons.location_on,
+          ),
+          onPressed: () {
+            updateCameraPosition(currentPosition);
+          }),
       body: SafeArea(
         child: Center(
           child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -56,8 +74,11 @@ class _ViewLocationState extends State<ViewLocation> {
               builder: (context, snapshot) {
                 if (snapshot.data != null) {
                   Map<String, dynamic> data = snapshot.data.data();
-
-                  updateCameraPosition(data['latitude'], data['longitude']);
+                  currentPosition = LatLng(data['latitude'], data['longitude']);
+                  if (firstSnapshot) {
+                    firstSnapshot = false;
+                    updateCameraPosition(currentPosition);
+                  }
                 }
 
                 return Column(
@@ -107,12 +128,13 @@ class _ViewLocationState extends State<ViewLocation> {
       // height: screenHeight * 0.3,
       width: screenWidth,
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-          color: Colors.white,
+      decoration: BoxDecoration(
+          // color: Colors.white,
+          color: themeColor.withAlpha(175),
           // border: Border(
           //   top: BorderSide(width: 1, color: Colors.grey),
           // ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(5), topRight: Radius.circular(5))),
       child: Column(children: [
         Row(
@@ -139,6 +161,7 @@ class _ViewLocationState extends State<ViewLocation> {
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               name,
