@@ -58,6 +58,13 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         'fcmToken': token,
         'alert': false
       });
+
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const Dashboard(),
+          ),
+          (route) => false);
     }
   }
 
@@ -163,12 +170,6 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         ),
                         onPressed: () async {
                           await updateUser();
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const Dashboard(),
-                              ),
-                              (route) => false);
                         },
                         child: SizedBox(
                           width: screenWidth * 0.35,

@@ -1,15 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:location/location.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:womensafteyhackfair/Dashboard/ContactScreens/phonebook_view.dart';
-import 'package:womensafteyhackfair/Dashboard/Home.dart';
-import 'package:womensafteyhackfair/Dashboard/ContactScreens/MyContacts.dart';
-import 'package:womensafteyhackfair/Services/alert_service.dart';
+import '../Dashboard/ContactScreens/phonebook_view.dart';
+import '../Dashboard/Home.dart';
+import '../Dashboard/ContactScreens/MyContacts.dart';
+import '../Services/alert_service.dart';
 
 import '../Services/bg_service.dart';
 import '../Services/utility_service.dart';
@@ -108,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
                           "assets/alarm.png",
                           height: 24,
                         ),
-                        Text("STOP")
+                        const Text("STOP")
                       ],
                     )
                   : Image.asset(
@@ -120,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 12,
-        child: Container(
+        child: SizedBox(
           height: 60,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -163,11 +163,12 @@ class _DashboardState extends State<Dashboard> {
     checkPermission();
     prefs.setBool("alerted", isAlert);
     List<String> numbers = prefs.getStringList("numbers") ?? [];
-    LocationData myLocation;
     String error;
     String message = '';
 
-    String displayName = FirebaseAuth.instance.currentUser.displayName;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    User _currentUser = FirebaseAuth.instance.currentUser;
+
     AlertService alertService = AlertService();
 
     try {
@@ -176,6 +177,7 @@ class _DashboardState extends State<Dashboard> {
           prefs.setBool("alerted", false);
           alerted = false;
         });
+
         // BackgroundService bgService = BackgroundService();
         // bgService.initializeService();
         // alertService.sendAlert(message, "Click to view location");
@@ -186,13 +188,13 @@ class _DashboardState extends State<Dashboard> {
       } else {
         BackgroundService bgService = BackgroundService();
         if (isAlert) {
-          message = "$displayName is in danger!";
+          message = "${_currentUser.displayName} is in danger!";
         } else {
           // BackgroundService.stopService();
           // bgService.stopService();
           Fluttertoast.showToast(
               msg: "Contacts are being notified about false SOS.");
-          message = "$displayName is Safe!";
+          message = "${_currentUser.displayName} is Safe!";
         }
         // BackgroundService.initializeService();
         bgService.initializeService();
@@ -207,13 +209,13 @@ class _DashboardState extends State<Dashboard> {
         error = 'Permission denied- please enable it from app settings';
         print("Error due to not Asking: $error");
       }
-      myLocation = null;
-
       prefs.setBool("alerted", false);
-
       setState(() {
         alerted = false;
       });
+
+      users.doc(_currentUser.uid).update(
+          {'timestamp': FieldValue.serverTimestamp(), 'alert': alerted});
     }
   }
 

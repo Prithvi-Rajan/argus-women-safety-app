@@ -11,8 +11,8 @@ import 'package:flutter_background_service_android/flutter_background_service_an
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_android/geolocator_android.dart' as gla;
-import 'package:womensafteyhackfair/Services/utility_service.dart';
-import 'package:womensafteyhackfair/firebase_options.dart';
+import '../Services/utility_service.dart';
+import '../firebase_options.dart';
 
 class BackgroundService {
   final service = FlutterBackgroundService();
@@ -54,10 +54,11 @@ class BackgroundService {
       service.setAsBackgroundService();
     }
 
-    service.on('stopService').listen((event) {
+    service.on('stopService').listen((event) async {
       timer?.cancel();
       print('stopped');
-      service.stopSelf();
+
+      // service.stopSelf();
     });
 
     timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
@@ -73,12 +74,12 @@ class BackgroundService {
 
   static void run() async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    User _currentUser = FirebaseAuth.instance.currentUser;
     int batteryPercent =
         (await BatteryInfoPlugin().androidBatteryInfo).batteryLevel;
 
     String error = '';
     try {
+      User _currentUser = FirebaseAuth.instance.currentUser;
       Position myLocation = await Geolocator.getCurrentPosition();
       var currentLocation = myLocation;
       final geo = Geoflutterfire();
@@ -90,6 +91,7 @@ class BackgroundService {
         'longitude': currentLocation.longitude,
         'geohash': myLocationPoint.data,
         'timestamp': FieldValue.serverTimestamp(),
+        'alert': true
       });
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
