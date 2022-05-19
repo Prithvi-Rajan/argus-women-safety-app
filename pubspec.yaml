@@ -30,7 +30,7 @@ dependencies:
   firebase_auth: ^3.3.15
   firebase_core: ^1.14.1
   firebase_messaging: ^11.3.0
-  firebase_storage: ^10.2.13
+  firebase_storage: ^10.2.16
   flutter:
     sdk: flutter
   flutter_background_service: ^2.0.0
