@@ -18,7 +18,6 @@ class BackgroundService {
   final service = FlutterBackgroundService();
 
   void stopService() {
-    // final service = FlutterBackgroundService();
     service.invoke('stopService');
   }
 
@@ -50,15 +49,14 @@ class BackgroundService {
         options: DefaultFirebaseOptions.currentPlatform);
     gla.GeolocatorAndroid.registerWith();
 
-    if (service is AndroidServiceInstance) {
-      service.setAsBackgroundService();
-    }
+    // if (service is AndroidServiceInstance) {
+    //   service.setAsBackgroundService();
+    // }
 
     service.on('stopService').listen((event) async {
       timer?.cancel();
+      await service.stopSelf();
       print('stopped');
-
-      // service.stopSelf();
     });
 
     timer = Timer.periodic(const Duration(seconds: 10), (timer) async {

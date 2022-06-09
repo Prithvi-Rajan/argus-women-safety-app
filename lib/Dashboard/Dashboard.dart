@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+// import 'package:shake/shake.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Dashboard/ContactScreens/phonebook_view.dart';
 import '../Dashboard/Home.dart';
@@ -42,6 +43,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    listenShakes();
     checkAlertSharedPreferences();
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
@@ -67,6 +69,15 @@ class _DashboardState extends State<Dashboard> {
         alerted = prefs.getBool("alerted") ?? false;
       });
     }
+  }
+
+  listenShakes() {
+    // ShakeDetector detector = ShakeDetector.autoStart(
+    //     minimumShakeCount: 2,
+    //     shakeCountResetTime: 5000,
+    //     onPhoneShake: () {
+    //       if (!alerted) sendAlert(true);
+    //     });
   }
 
   @override
@@ -164,7 +175,6 @@ class _DashboardState extends State<Dashboard> {
     prefs.setBool("alerted", isAlert);
     List<String> numbers = prefs.getStringList("numbers") ?? [];
     String error;
-    String message = '';
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     User _currentUser = FirebaseAuth.instance.currentUser;
@@ -177,28 +187,26 @@ class _DashboardState extends State<Dashboard> {
           prefs.setBool("alerted", false);
           alerted = false;
         });
-
-        // BackgroundService bgService = BackgroundService();
-        // bgService.initializeService();
-        // alertService.sendAlert(message, "Click to view location");
         return Fluttertoast.showToast(
           msg: 'No Contacts Found!',
           backgroundColor: Colors.red,
         );
       } else {
+        bool isSos = false;
         BackgroundService bgService = BackgroundService();
         if (isAlert) {
-          message = "${_currentUser.displayName} is in danger!";
+          isSos = true;
+          bgService.initializeService();
+          users.doc(_currentUser.uid).update(
+              {'timestamp': FieldValue.serverTimestamp(), 'alert': true});
         } else {
-          // BackgroundService.stopService();
-          // bgService.stopService();
+          users.doc(_currentUser.uid).update(
+              {'timestamp': FieldValue.serverTimestamp(), 'alert': false});
+          bgService.stopService();
           Fluttertoast.showToast(
               msg: "Contacts are being notified about false SOS.");
-          message = "${_currentUser.displayName} is Safe!";
         }
-        // BackgroundService.initializeService();
-        bgService.initializeService();
-        alertService.sendAlert(message, "Click to view location");
+        alertService.sendAlert(isSos);
       }
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
@@ -213,9 +221,6 @@ class _DashboardState extends State<Dashboard> {
       setState(() {
         alerted = false;
       });
-
-      users.doc(_currentUser.uid).update(
-          {'timestamp': FieldValue.serverTimestamp(), 'alert': alerted});
     }
   }
 

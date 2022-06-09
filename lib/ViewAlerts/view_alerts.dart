@@ -77,6 +77,8 @@ class _ViewAlertsState extends State<ViewAlerts> {
                   color: data['alert'] ? Colors.red : Colors.green,
                 ),
               ),
+              tileColor:
+                  data['sos'] ? Colors.red.shade100 : Colors.green.shade100,
               onTap: () {
                 if (data['alert']) {
                   Navigator.push(
@@ -85,8 +87,9 @@ class _ViewAlertsState extends State<ViewAlerts> {
                       builder: (context) => ViewLocation(uid: from),
                     ),
                   );
+                } else {
+                  Fluttertoast.showToast(msg: 'SOS alert ended!');
                 }
-                Fluttertoast.showToast(msg: 'SOS alert ended!');
               },
             ),
           );
