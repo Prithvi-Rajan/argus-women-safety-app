@@ -39,15 +39,18 @@ class _ViewAlertsState extends State<ViewAlerts> {
             return ListView.builder(
               shrinkWrap: true,
               itemCount: snapshot.data.docs.length,
-              itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: alertWidget(snapshot.data.docs[index].data()['from'])),
+              itemBuilder: (context, index) {
+                var data = snapshot.data.docs[index].data();
+                return Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: alertWidget(data['from'], data['sos']));
+              },
             );
           }),
     );
   }
 
-  Widget alertWidget(String from) {
+  Widget alertWidget(String from, bool isSos) {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('users')
@@ -77,8 +80,7 @@ class _ViewAlertsState extends State<ViewAlerts> {
                   color: data['alert'] ? Colors.red : Colors.green,
                 ),
               ),
-              tileColor:
-                  data['sos'] ? Colors.red.shade100 : Colors.green.shade100,
+              tileColor: isSos ? Colors.red.shade100 : Colors.green.shade100,
               onTap: () {
                 if (data['alert']) {
                   Navigator.push(

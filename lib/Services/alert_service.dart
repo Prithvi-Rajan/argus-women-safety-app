@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sms_maintained/sms.dart' as smsSender;
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_maintained/sms.dart';
+// import 'package:telephony/telephony.dart';
 
 import 'fcm_service.dart';
 import 'utility_service.dart';
@@ -46,11 +49,12 @@ class AlertService {
       }
     }
 
-    FCMService fcmService = FCMService();
-    fcmService.sendMessage(tokens, isSos ? sosMessage : safeMessage, subTitle,
-        {'uid': _currentUser.uid});
-
-    _sendSMS(isSos ? sosSMS : safeSMS, nonAppUsers);
+    if (tokens.isNotEmpty) {
+      FCMService fcmService = FCMService();
+      fcmService.sendMessage(tokens, isSos ? sosMessage : safeMessage, subTitle,
+          {'uid': _currentUser.uid});
+    }
+    if (nonAppUsers.isNotEmpty) _sendSMS(isSos ? sosSMS : safeSMS, nonAppUsers);
 
     logNotifications(isSos, uids, _currentUser.uid);
   }
@@ -68,10 +72,10 @@ class AlertService {
   }
 
   void _sendSMS(String message, List<String> recipents) async {
-    String _result = await sendSMS(message: message, recipients: recipents)
-        .catchError((onError) {
-      print(onError);
-    });
-    print(_result);
+    for (var number in recipents) {
+      smsSender.SmsMessage msg = smsSender.SmsMessage(number, message);
+      final smsSender.SmsSender sender = smsSender.SmsSender();
+      sender.sendSms(msg);
+    }
   }
 }
