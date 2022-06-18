@@ -59,7 +59,7 @@ class BackgroundService {
       print('stopped');
     });
 
-    timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 15 * 60), (timer) async {
       if (service is AndroidServiceInstance) {
         service.setForegroundNotificationInfo(
           title: "Background Service running",

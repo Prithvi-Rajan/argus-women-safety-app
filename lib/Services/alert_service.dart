@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:sms_maintained/sms.dart' as smsSender;
 import 'package:geolocator/geolocator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,9 @@ class AlertService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Position myLocation = await Geolocator.getCurrentPosition();
     User _currentUser = FirebaseAuth.instance.currentUser;
-
+    final geo = Geoflutterfire();
+    GeoFirePoint point = geo.point(
+        latitude: myLocation.latitude, longitude: myLocation.longitude);
     String sosMessage = '${_currentUser.displayName} is in danger!';
     String safeMessage = '${_currentUser.displayName} is Safe!';
     String sosSMS =
@@ -35,6 +38,7 @@ class AlertService {
     List<String> uids = [];
     List<String> fcmContacts = [];
     List<String> nonAppUsers = [];
+    List<String> nearbyAppUsers = [];
 
     for (var doc in querySnapshot.docs) {
       var data = doc.data() as Map<String, dynamic>;
@@ -48,15 +52,37 @@ class AlertService {
         nonAppUsers.add(number);
       }
     }
+    double radius = 5000000.0; // in km
+    List<DocumentSnapshot<Map<String, dynamic>>> nearbyUsersSnapshot = await geo
+        .collection(collectionRef: users as Query<Map<String, dynamic>>)
+        .within(center: point, radius: radius, field: 'geohash')
+        .first;
+
+    for (var doc in nearbyUsersSnapshot) {
+      var data = doc.data();
+      if (data['uid'] != _currentUser.uid) {
+        nearbyAppUsers.add(data['uid'].toString());
+      }
+    }
 
     if (tokens.isNotEmpty) {
-      FCMService fcmService = FCMService();
-      fcmService.sendMessage(tokens, isSos ? sosMessage : safeMessage, subTitle,
-          {'uid': _currentUser.uid});
+      sentPushNotification(
+          tokens, isSos ? sosMessage : safeMessage, _currentUser.uid);
     }
+
+    if (isSos && nearbyAppUsers.isNotEmpty) {
+      sentPushNotification(
+          nearbyAppUsers, isSos ? sosMessage : safeMessage, _currentUser.uid);
+    }
+
     if (nonAppUsers.isNotEmpty) _sendSMS(isSos ? sosSMS : safeSMS, nonAppUsers);
 
     logNotifications(isSos, uids, _currentUser.uid);
+  }
+
+  void sentPushNotification(List<String> tokens, String message, String uid) {
+    FCMService fcmService = FCMService();
+    fcmService.sendMessage(tokens, message, subTitle, {'uid': uid});
   }
 
   void logNotifications(bool isSos, List<String> uids, String uid) async {
