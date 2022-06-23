@@ -52,7 +52,7 @@ class AlertService {
         nonAppUsers.add(number);
       }
     }
-    double radius = 5000000.0; // in km
+    double radius = 5.0; // in km
     List<DocumentSnapshot<Map<String, dynamic>>> nearbyUsersSnapshot = await geo
         .collection(collectionRef: users as Query<Map<String, dynamic>>)
         .within(center: point, radius: radius, field: 'geohash')
@@ -61,7 +61,7 @@ class AlertService {
     for (var doc in nearbyUsersSnapshot) {
       var data = doc.data();
       if (data['uid'] != _currentUser.uid) {
-        nearbyAppUsers.add(data['uid'].toString());
+        nearbyAppUsers.add(data['fcmToken'].toString());
       }
     }
 
@@ -71,8 +71,7 @@ class AlertService {
     }
 
     if (isSos && nearbyAppUsers.isNotEmpty) {
-      sentPushNotification(
-          nearbyAppUsers, isSos ? sosMessage : safeMessage, _currentUser.uid);
+      sentPushNotification(nearbyAppUsers, sosMessage, _currentUser.uid);
     }
 
     if (nonAppUsers.isNotEmpty) _sendSMS(isSos ? sosSMS : safeSMS, nonAppUsers);
